@@ -4,6 +4,7 @@ import subprocess
 import sys, os
 from pathlib import Path
 from dotenv import load_dotenv
+from security import safe_command
 
 SCRIPT = Path("scripts/run_daily_ingestion.py")
 load_dotenv()  # 👈 ensure env vars from .env are loaded into this test process
@@ -14,7 +15,7 @@ def test_cli_runs_and_prints_metadata_only():
     env = os.environ.copy()  # 👈 inherit and pass all env vars to subprocess
     env["APP_CONFIG"] = "tests/tmp/app_config_test.yaml" # Set APP_CONFIG in CLI test code
 
-    result = subprocess.run([
+    result = safe_command.run(subprocess.run, [
         sys.executable, str(SCRIPT),
         "--date", "2025-04-28",
         "--limit", "1",
@@ -32,7 +33,7 @@ def test_cli_runs_and_prints_docs_only():
     env = os.environ.copy()  # 👈 inherit and pass all env vars to subprocess
     env["APP_CONFIG"] = "tests/tmp/app_config_test.yaml" # Set APP_CONFIG in CLI test code
 
-    result = subprocess.run([
+    result = safe_command.run(subprocess.run, [
         sys.executable, str(SCRIPT),
         "--date", "2025-04-28",
         "--limit", "1",
@@ -49,7 +50,7 @@ def test_cli_runs_both_steps():
     env = os.environ.copy()  # 👈 inherit and pass all env vars to subprocess
     env["APP_CONFIG"] = "tests/tmp/app_config_test.yaml" # Set APP_CONFIG in CLI test code
 
-    result = subprocess.run([
+    result = safe_command.run(subprocess.run, [
         sys.executable, str(SCRIPT),
         "--date", "2025-04-28",
         "--limit", "1"
@@ -77,7 +78,7 @@ def test_cli_writes_raw_file_to_disk():
     env["APP_CONFIG"] = "tests/tmp/app_config_test.yaml"
 
     # Run CLI ingestion for a known accession number (limit = 1)
-    subprocess.run([
+    safe_command.run(subprocess.run, [
         sys.executable, str(SCRIPT),
         "--date", "2025-04-28",
         "--limit", "1",
