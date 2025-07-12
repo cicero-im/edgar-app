@@ -1,7 +1,7 @@
 import os
-import requests
 from utils.path_manager import build_raw_filepath, build_processed_filepath
 from parsers.embedded_doc_parser import EmbeddedDocParser
+from security import safe_requests
 
 class EmbeddedDocOrchestrator:
     def __init__(self, base_path="./test_data"):
@@ -29,7 +29,7 @@ class EmbeddedDocOrchestrator:
         print(f"🧪 [DEBUG repr] embedded_url = {repr(embedded_url)}")
         print(f"🧪 [DEBUG hex]    last segment = {[hex(ord(c)) for c in embedded_url[-20:]]}")
 
-        response = requests.get(embedded_url)
+        response = safe_requests.get(embedded_url)
 
         if response.status_code != 200:
             print(f"[ERROR] Failed to download: {embedded_url}")

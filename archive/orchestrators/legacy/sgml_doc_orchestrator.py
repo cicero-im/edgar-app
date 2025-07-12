@@ -1,4 +1,3 @@
-import requests
 import time
 from config.config_loader import ConfigLoader
 from utils.url_builder import construct_sgml_txt_url
@@ -8,6 +7,7 @@ from archive.writers.parsed_sgml_writer import ParsedSgmlWriter
 from utils.path_utils import build_path_args
 from utils.path_manager import build_raw_filepath
 from utils.report_logger import log_info, log_debug, log_error, log_warn
+from security import safe_requests
 
 class SgmlDocOrchestrator:
     # write_to_db = true if running this orch isolated (outside the batch orch). Otherwise BatchSgmlIngestionOrchestrator tries to write 2x to `parsed_sgml_metadata`
@@ -34,12 +34,12 @@ class SgmlDocOrchestrator:
         }
 
         log_info(f"📥 Downloading SGML: {sgml_url}")
-        response = requests.get(sgml_url, headers=headers)
+        response = safe_requests.get(sgml_url, headers=headers)
 
         if response.status_code != 200:
             log_warn(f"⚠️ First attempt failed with status {response.status_code}. Retrying...")
             time.sleep(1)
-            response = requests.get(sgml_url, headers=headers)
+            response = safe_requests.get(sgml_url, headers=headers)
 
         if response.status_code != 200:
             log_error(f"[ERROR] Download failed after retry: {sgml_url} (status {response.status_code})")

@@ -5,7 +5,6 @@
 
 from datetime import date as dt_date, datetime
 from typing import List, Union
-import requests
 
 from collections import defaultdict
 from collectors.base_collector import BaseCollector
@@ -13,6 +12,7 @@ from models.dataclasses.filing_metadata import FilingMetadata
 from utils.report_logger import log_warn, log_info
 from utils.sgml_utils import download_sgml_for_accession, extract_issuer_cik_from_sgml
 from parsers.idx.idx_parser import CrawlerIdxParser
+from security import safe_requests
 
 class FilingMetadataCollector(BaseCollector):
     def __init__(self, user_agent: str):
@@ -47,7 +47,7 @@ class FilingMetadataCollector(BaseCollector):
         
         log_info(f"[DEBUG] Downloading crawler.idx for {date_compact} from URL: {url}")
         # Set a timeout to avoid hanging indefinitely
-        response = requests.get(url, headers=headers, timeout=30)
+        response = safe_requests.get(url, headers=headers, timeout=30)
         log_info(f"[DEBUG] Download completed. Status code: {response.status_code}, Size: {len(response.text)//1024} KB")
         response.raise_for_status()
 

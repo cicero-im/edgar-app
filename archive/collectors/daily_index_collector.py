@@ -1,10 +1,10 @@
 # collectors/daily_index_collector.py
 
 from datetime import datetime, date as dt_date
-import requests
 from collectors.base_collector import BaseCollector
 from archive.models.index_record_model import IndexRecordModel
 from utils.report_logger import log_warn, log_debug
+from security import safe_requests
 
 class DailyIndexCollector(BaseCollector):
     def __init__(self, user_agent: str):
@@ -54,7 +54,7 @@ class DailyIndexCollector(BaseCollector):
 
 
         headers = {"User-Agent": self.user_agent}
-        response = requests.get(url, headers=headers)
+        response = safe_requests.get(url, headers=headers)
         response.raise_for_status()
 
         lines = response.text.splitlines()

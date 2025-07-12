@@ -3,6 +3,7 @@
 import time
 import requests
 from downloaders.base_downloader import BaseDownloader
+from security import safe_requests
 
 class SECDownloader(BaseDownloader):
     def __init__(self, user_agent: str, request_delay_seconds: float = 1.0):
@@ -29,7 +30,7 @@ class SECDownloader(BaseDownloader):
     def _make_request(self, url: str) -> requests.Response:
         """Internal method to make a GET request with headers."""
         headers = {"User-Agent": self.user_agent}
-        response = requests.get(url, headers=headers, timeout=10)
+        response = safe_requests.get(url, headers=headers, timeout=10)
         return response
 
     def download_html(self, url: str) -> str:
