@@ -13,6 +13,7 @@ from models.dataclasses.forms.security_data import SecurityData
 from models.dataclasses.forms.derivative_security_data import DerivativeSecurityData
 from models.dataclasses.forms.transaction_data import NonDerivativeTransactionData, DerivativeTransactionData
 from models.dataclasses.forms.position_data import RelationshipPositionData
+import defusedxml.ElementTree
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +95,7 @@ class Form4ParserV2(BaseParser):
     def _parse_xml_safely(self, xml_content: str) -> ET.Element:
         """Safe XML parsing with error handling."""
         try:
-            return ET.fromstring(xml_content)
+            return defusedxml.ElementTree.fromstring(xml_content)
         except ET.ParseError as e:
             logger.error(f"Invalid XML syntax: {e}")
             raise ValueError(f"Invalid XML syntax: {e}")

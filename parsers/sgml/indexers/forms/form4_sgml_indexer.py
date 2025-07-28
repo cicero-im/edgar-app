@@ -12,6 +12,7 @@ from typing import Dict, List, Optional, Tuple, Any
 import xml.etree.ElementTree as ET
 import re
 from utils.report_logger import log_info, log_warn, log_error
+import defusedxml.ElementTree
 
 class Form4SgmlIndexer(SgmlDocumentIndexer):
     """
@@ -213,8 +214,7 @@ class Form4SgmlIndexer(SgmlDocumentIndexer):
         xml_content = self.extract_xml_content(txt_contents)
         if xml_content:
             try:
-                import xml.etree.ElementTree as ET
-                root = ET.fromstring(xml_content)
+                root = defusedxml.ElementTree.fromstring(xml_content)
                 
                 issuer_element = root.find(".//issuer")
                 if issuer_element is not None:
@@ -430,7 +430,7 @@ class Form4SgmlIndexer(SgmlDocumentIndexer):
     def parse_xml_transactions(self, xml_content: str, form4_data: Form4FilingData) -> None:
         """Parse transaction details from XML content and update form4_data."""
         try:
-            root = ET.fromstring(xml_content)
+            root = defusedxml.ElementTree.fromstring(xml_content)
             
             # Extract footnotes
             footnotes = {}
