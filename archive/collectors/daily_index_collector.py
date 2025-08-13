@@ -54,7 +54,7 @@ class DailyIndexCollector(BaseCollector):
 
 
         headers = {"User-Agent": self.user_agent}
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=60)
         response.raise_for_status()
 
         lines = response.text.splitlines()

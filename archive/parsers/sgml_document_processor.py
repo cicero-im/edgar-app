@@ -33,11 +33,11 @@ class SgmlDocumentProcessor:
 
     def process(self, cik: str, accession_number: str, form_type: str, sgml_url: str) -> List[ParsedDocument]:
         log_info(f"📥 Downloading SGML .txt for {accession_number}")
-        response = requests.get(sgml_url, headers=self.headers)
+        response = requests.get(sgml_url, headers=self.headers, timeout=60)
 
         if response.status_code != 200:
             log_warn(f"⚠️ First attempt failed ({response.status_code}) — retrying...")
-            response = requests.get(sgml_url, headers=self.headers)
+            response = requests.get(sgml_url, headers=self.headers, timeout=60)
 
         if response.status_code != 200:
             log_error(f"❌ Failed to fetch SGML file after retry: {sgml_url}")
