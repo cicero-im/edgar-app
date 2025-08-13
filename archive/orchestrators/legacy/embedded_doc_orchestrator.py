@@ -29,7 +29,7 @@ class EmbeddedDocOrchestrator:
         print(f"🧪 [DEBUG repr] embedded_url = {repr(embedded_url)}")
         print(f"🧪 [DEBUG hex]    last segment = {[hex(ord(c)) for c in embedded_url[-20:]]}")
 
-        response = requests.get(embedded_url)
+        response = requests.get(embedded_url, timeout=60)
 
         if response.status_code != 200:
             print(f"[ERROR] Failed to download: {embedded_url}")

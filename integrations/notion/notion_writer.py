@@ -71,8 +71,8 @@ def post_summary_to_notion(ticker: str, company_name: str, summary: str, filing_
         response = requests.post(
             "https://api.notion.com/v1/pages",
             json=payload,
-            headers=NOTION_HEADERS
-        )
+            headers=NOTION_HEADERS, 
+        timeout=60)
 
 
 

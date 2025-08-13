@@ -34,12 +34,12 @@ class SgmlDocOrchestrator:
         }
 
         log_info(f"📥 Downloading SGML: {sgml_url}")
-        response = requests.get(sgml_url, headers=headers)
+        response = requests.get(sgml_url, headers=headers, timeout=60)
 
         if response.status_code != 200:
             log_warn(f"⚠️ First attempt failed with status {response.status_code}. Retrying...")
             time.sleep(1)
-            response = requests.get(sgml_url, headers=headers)
+            response = requests.get(sgml_url, headers=headers, timeout=60)
 
         if response.status_code != 200:
             log_error(f"[ERROR] Download failed after retry: {sgml_url} (status {response.status_code})")
